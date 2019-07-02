@@ -10,7 +10,7 @@ def read(fname):
 setup(
     name='air-quality-index',
     version='0.0.1',
-    description="Download air quality index data from AirNow.",
+    description="Download air quality index data from AirNow",
     long_description=read('README.rst'),
     author='Los Angeles Times Data Desk',
     author_email='datadesk@latimes.com',
