@@ -8,15 +8,23 @@ def read(fname):
 
 
 setup(
-    name='<your-pypi-package-name>',
+    name='air-quality-index',
     version='0.0.1',
-    description="<your-repo-description>",
+    description="Download air quality index data from AirNow.",
     long_description=read('README.rst'),
     author='Los Angeles Times Data Desk',
     author_email='datadesk@latimes.com',
-    url='http://www.github.com/datadesk/<your-repo-slug>',
+    url='http://www.github.com/datadesk/air-quality-index',
     license="MIT",
-    packages=("<your-python-module-name>",),
+    packages=("air-quality-index",),
+    install_requires=[
+        "requests",
+        "click",
+    ],
+    entry_points="""
+        [console_scripts]
+        airqualityindex=air_quality_index.cli:cmd
+    """,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python',
@@ -26,7 +34,7 @@ setup(
     ],
     project_urls={
         'Maintainer': 'https://github.com/datadesk',
-        'Source': 'https://github.com/datadesk/<your-repo-slug>',
-        'Tracker': 'https://github.com/datadesk/<your-repo-slug>/issues'
+        'Source': 'https://github.com/datadesk/air-quality-index',
+        'Tracker': 'https://github.com/datadesk/air-quality-index/issues'
     },
 )

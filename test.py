@@ -1,12 +1,13 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 import unittest
+from air_quality_index import get_air_quality
 
 
-class MyUnitTest(unittest.TestCase):
+class AirQualityIndexUnitTest(unittest.TestCase):
 
-    def test_foo(self):
-        pass
+    def test_air_quality(self):
+        get_air_quality()
 
 
 if __name__ == '__main__':
