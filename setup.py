@@ -16,10 +16,11 @@ setup(
     author_email='datadesk@latimes.com',
     url='http://www.github.com/datadesk/air-quality-index',
     license="MIT",
-    packages=("air-quality-index",),
+    packages=("air_quality_index",),
     install_requires=[
         "requests",
         "click",
+        "kml2geojson",
     ],
     entry_points="""
         [console_scripts]
