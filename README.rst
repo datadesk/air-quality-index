@@ -27,7 +27,7 @@ Command-line usage
       --help  Show this message and exit.
 
     Commands:
-      air_quality  Download a GeoJSON of air quality index from AirNow
+      air-quality  Download a GeoJSON of air quality index from AirNow
 
 
 Download a GeoJSON of air quality index from AirNow. ::
@@ -69,3 +69,8 @@ Developing the CLI
 The command-line interface is implemented using Click and setuptools. To install it locally for development inside your virtual environment, run the following installation command, as `prescribed by the Click documentation <https://click.palletsprojects.com/en/7.x/setuptools/#setuptools-integration>`_. ::
 
     $ pip install --editable .
+
+AirNow API Usage
+----------------
+
+In order to use this package, you'll need to obtain an API key from `AirNow <https://docs.airnowapi.org/>`_ and set it as a variable in your environment.
