@@ -18,7 +18,6 @@ def get_air_quality():
     Returns GeoJSON.
     """
     formatted_date = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H")
-    print('first date', formatted_date)
     # AirNow is usually at least an hour behind UTC time, so go ahead and subract an
     # hour and don't waste a request on it
     formatted_date = _subtract_hour(formatted_date)
@@ -27,7 +26,6 @@ def get_air_quality():
 
 
 def _request(formatted_date):
-    print(formatted_date)
     # Create temporary file to write request data to
     fp = tempfile.NamedTemporaryFile()
     # Create temporary directory that kml2geojson will write file to
@@ -50,9 +48,13 @@ def _request(formatted_date):
         # folder that we created and pull the first file.
         with open(f'{outdir.name}/{os.listdir(outdir.name)[0]}') as f:
             # print(f.read())
+            geojson = json.loads(f.read())
+            geojson['properties'] = {
+                'utc_time': formatted_date
+            }
             # return f.read()
-            with open("test.geojson", "w") as f2:
-                f2.write('%s' % f.read())
+            with open('test.geojson', 'w') as outfile:
+                json.dump(geojson, outfile)
 
 
 def _subtract_hour(formatted_date):
@@ -71,4 +73,4 @@ def _subtract_hour(formatted_date):
 
 
 if __name__ == '__main__':
-    j = get_air_quality()
+    get_air_quality()
