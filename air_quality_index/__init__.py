@@ -46,12 +46,13 @@ def _request(formatted_date):
         kml2geojson.main.convert(str(fp.name), outdir.name, separate_folders=False, style_type=None, style_filename='style.json')
         # We don't know the name of the geojson file since it's a tempfile, so open the temporary
         # folder that we created and pull the first file.
+        geojson = {}
         with open(f'{outdir.name}/{os.listdir(outdir.name)[0]}') as f:
             geojson = json.loads(f.read())
             geojson['properties'] = {
                 'utc_time': formatted_date
             }
-            return json.dumps(geojson, indent=4)
+        return json.dumps(geojson, indent=4)
 
 
 def _subtract_hour(formatted_date):
