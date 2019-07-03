@@ -47,14 +47,11 @@ def _request(formatted_date):
         # We don't know the name of the geojson file since it's a tempfile, so open the temporary
         # folder that we created and pull the first file.
         with open(f'{outdir.name}/{os.listdir(outdir.name)[0]}') as f:
-            # print(f.read())
             geojson = json.loads(f.read())
             geojson['properties'] = {
                 'utc_time': formatted_date
             }
-            # return f.read()
-            with open('test.geojson', 'w') as outfile:
-                json.dump(geojson, outfile)
+            return json.dumps(geojson, indent=4)
 
 
 def _subtract_hour(formatted_date):
