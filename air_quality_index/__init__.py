@@ -52,7 +52,7 @@ def _request(formatted_date):
             geojson['properties'] = {
                 'utc_time': formatted_date
             }
-        return json.dumps(geojson, indent=4)
+        return geojson
 
 
 def _subtract_hour(formatted_date):
