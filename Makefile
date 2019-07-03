@@ -1,5 +1,8 @@
 .PHONY: test ship
 
+run:
+	python air_quality_index/__init__.py
+
 test:
 	flake8 ./
 	coverage run test.py
