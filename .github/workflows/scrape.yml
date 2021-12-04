@@ -24,6 +24,8 @@ jobs:
         run: |
           pipenv run python setup.py install
           make scrape
+        env:
+          AIRNOW_KEYS: ${{ secrets.AIRNOW_KEYS }}
         shell: bash
 
       - id: commit
