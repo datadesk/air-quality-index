@@ -9,12 +9,13 @@ def read(fname):
 
 setup(
     name='air-quality-index',
-    version='0.0.4',
+    version='0.1.0',
     description="Download air quality index data from AirNow",
-    long_description=read('README.rst'),
-    author='Los Angeles Times Data Desk',
-    author_email='datadesk@latimes.com',
-    url='http://www.github.com/datadesk/air-quality-index',
+    long_description=read('README.md'),
+    long_description_content_type='text/markdown',
+    author='Ben Welsh',
+    author_email='b@palewi.re',
+    url='http://www.github.com/palewire/air-quality-index',
     license="MIT",
     packages=("air_quality_index",),
     install_requires=[
@@ -31,11 +32,13 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'License :: OSI Approved :: MIT License',
     ],
     project_urls={
-        'Maintainer': 'https://github.com/datadesk',
-        'Source': 'https://github.com/datadesk/air-quality-index',
-        'Tracker': 'https://github.com/datadesk/air-quality-index/issues'
+        'Maintainer': 'https://github.com/palewire',
+        'Source': 'https://github.com/palewire/air-quality-index',
+        'Tracker': 'https://github.com/palewire/air-quality-index/issues'
     },
 )

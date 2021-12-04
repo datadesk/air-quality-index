@@ -7,6 +7,9 @@ test:
 	pipenv run coverage run test.py
 	pipenv run coverage report -m
 
+scrape:
+	pipenv run airqualityindex air-quality > data/air-quality.json
+
 ship:
 	rm -rf build/
 	rm -rf dist/
