@@ -27,7 +27,7 @@ def get_air_quality():
     return _request(formatted_date)
 
 
-def _request(formatted_date):
+def _request(formatted_date, retry=0):
     # Create temporary file to write request data to
     fp = tempfile.NamedTemporaryFile()
 
@@ -47,8 +47,12 @@ def _request(formatted_date):
     # the updated data for that hour doesn't exist yet. If this is the case, subtract
     # an hour and try again.
     if(len(r.content) < 200):
-        formatted_date = _subtract_hour(formatted_date)
-        _request(formatted_date)
+        if retry < 10:
+            retry += 1
+            formatted_date = _subtract_hour(formatted_date)
+            _request(formatted_date, retry=retry)
+        else:
+            raise ValueError("Request failed")
     else:
         # If the response is good, return it
         return kml2geojson.main.convert(
