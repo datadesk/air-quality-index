@@ -9,7 +9,7 @@ def read(fname):
 
 setup(
     name='air-quality-index',
-    version='0.1.0',
+    version='0.1.1',
     description="Download air quality index data from AirNow",
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
