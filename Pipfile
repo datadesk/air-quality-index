@@ -12,7 +12,7 @@ sphinx = "*"
 [packages]
 requests = "*"
 click = "*"
-kml2geojson = "*"
+kml2geojson = ">=5.0.1"
 
 [requires]
 python_version = "3.9"
