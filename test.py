@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
 import unittest
 from air_quality_index import get_air_quality
 

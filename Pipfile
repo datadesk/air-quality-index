@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 twine = "*"
 flake8 = "*"
-coverage = "*"
+setuptools-scm = "*"
 
 [packages]
 requests = "*"
@@ -14,4 +14,4 @@ click = "*"
 kml2geojson = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.9"
