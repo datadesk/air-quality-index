@@ -4,14 +4,11 @@ from air_quality_index import get_air_quality
 
 @click.group()
 def cmd():
-    """
-    A command-line interface for downloading air quality index data from AirNow.
-    Returns GeoJSON.
-    """
+    """A command-line interface for downloading air quality index data from AirNow."""
     pass
 
 
-@cmd.command(help="Perimeters of active fires in a recent 24-hour period from GeoMAC")
+@cmd.command(help="Download latest air quality GeoJSON data")
 def air_quality():
     click.echo(get_air_quality())
 
