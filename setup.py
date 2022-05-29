@@ -7,15 +7,45 @@ def read(fname):
         return f.read()
 
 
+def version_scheme(version):
+    """
+    Version scheme hack for setuptools_scm.
+
+    Appears to be necessary to due to the bug documented here: https://github.com/pypa/setuptools_scm/issues/342
+
+    If that issue is resolved, this method can be removed.
+    """
+    import time
+
+    from setuptools_scm.version import guess_next_version
+
+    if version.exact:
+        return version.format_with("{tag}")
+    else:
+        _super_value = version.format_next_version(guess_next_version)
+        now = int(time.time())
+        return _super_value + str(now)
+
+
+def local_version(version):
+    """
+    Local version scheme hack for setuptools_scm.
+
+    Appears to be necessary to due to the bug documented here: https://github.com/pypa/setuptools_scm/issues/342
+
+    If that issue is resolved, this method can be removed.
+    """
+    return ""
+
+
 setup(
     name='air-quality-index',
-    version='0.1.1',
     description="Download air quality index data from AirNow",
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
     author='Ben Welsh',
     author_email='b@palewi.re',
-    url='http://www.github.com/palewire/air-quality-index',
+    url='http://www.github.com/datadesk/air-quality-index',
     license="MIT",
     packages=("air_quality_index",),
     install_requires=[
@@ -27,18 +57,19 @@ setup(
         [console_scripts]
         airqualityindex=air_quality_index.cli:cmd
     """,
+    use_scm_version={"version_scheme": version_scheme, "local_scheme": local_version},
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'License :: OSI Approved :: MIT License',
     ],
     project_urls={
-        'Maintainer': 'https://github.com/palewire',
-        'Source': 'https://github.com/palewire/air-quality-index',
-        'Tracker': 'https://github.com/palewire/air-quality-index/issues'
+        'Maintainer': 'https://github.com/datadesk',
+        'Source': 'https://github.com/datadesk/air-quality-index',
+        'Tracker': 'https://github.com/datadesk/air-quality-index/issues'
     },
 )
