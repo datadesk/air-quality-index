@@ -53,6 +53,9 @@ jobs:
       - id: run
         name: Run
         run: pipenv run python test.py
+        env:
+          AIRNOW_KEYS: ${{ secrets.AIRNOW_KEYS }}
+        shell: bash
 
   test-build:
     name: Build Python package

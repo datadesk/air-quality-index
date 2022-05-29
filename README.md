@@ -11,16 +11,13 @@ pipenv install air_quality_index
 ```sh
 Usage: airqualityindex [OPTIONS] COMMAND [ARGS]...
 
-  A command-line interface for downloading wildfire data from NASA
-  satellites.
-
-  Returns GeoJSON.
+  A command-line interface for downloading air quality index data from AirNow.
 
 Options:
   --help  Show this message and exit.
 
 Commands:
-  air-quality  Download a GeoJSON of air quality index from AirNow
+  air-quality  Download latest air quality GeoJSON data
 ```
 
 Download a GeoJSON of air quality index from AirNow.
@@ -34,13 +31,13 @@ airqualityindex air-quality
 Import the library.
 
 ```python
->>> import air_quality_index
+import air_quality_index
 ```
 
 Download a GeoJSON of air quality index from AirNow. Returns GeoJSON.
 
 ```python
->>> data = air_quality_index.get_air_quality()
+data = air_quality_index.get_air_quality()
 ```
 
 ## Contributing
@@ -60,13 +57,7 @@ pipenv install --dev
 Run tests.
 
 ```sh
-make test
-```
-
-Shipping new version to PyPI.
-
-```sh
-make ship
+pipenv run python test.py
 ```
 
 ## Developing the CLI
@@ -74,5 +65,5 @@ make ship
 The command-line interface is implemented using Click and setuptools. To install it locally for development inside your virtual environment, run the following installation command, as [prescribed by the Click documentation](https://click.palletsprojects.com/en/7.x/setuptools/#setuptools-integration).
 
 ```sh
-pip install --editable .
+pipenv run pip install --editable .
 ```
