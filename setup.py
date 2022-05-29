@@ -45,7 +45,7 @@ setup(
     long_description_content_type='text/markdown',
     author='Ben Welsh',
     author_email='b@palewi.re',
-    url='http://www.github.com/datadesk/air-quality-index',
+    url='https://palewi.re/docs/air-quality-index/',
     license="MIT",
     packages=("air_quality_index",),
     install_requires=[
