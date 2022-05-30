@@ -1,4 +1,5 @@
 import click
+
 from air_quality_index import get_air_quality
 
 
@@ -13,5 +14,5 @@ def air_quality():
     click.echo(get_air_quality())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cmd()

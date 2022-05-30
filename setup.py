@@ -1,4 +1,5 @@
 import os
+
 from setuptools import setup
 
 
@@ -39,13 +40,13 @@ def local_version(version):
 
 
 setup(
-    name='air-quality-index',
+    name="air-quality-index",
     description="Download air quality index data from AirNow",
-    long_description=read('README.md'),
-    long_description_content_type='text/markdown',
-    author='Ben Welsh',
-    author_email='b@palewi.re',
-    url='https://palewi.re/docs/air-quality-index/',
+    long_description=read("README.md"),
+    long_description_content_type="text/markdown",
+    author="Ben Welsh",
+    author_email="b@palewi.re",
+    url="https://palewi.re/docs/air-quality-index/",
     license="MIT",
     packages=("air_quality_index",),
     install_requires=[
@@ -59,17 +60,17 @@ setup(
     """,
     use_scm_version={"version_scheme": version_scheme, "local_scheme": local_version},
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
-        'License :: OSI Approved :: MIT License',
+        "Development Status :: 5 - Production/Stable",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "License :: OSI Approved :: MIT License",
     ],
     project_urls={
-        'Maintainer': 'https://github.com/datadesk',
-        'Source': 'https://github.com/datadesk/air-quality-index',
-        'Tracker': 'https://github.com/datadesk/air-quality-index/issues'
+        "Maintainer": "https://github.com/datadesk",
+        "Source": "https://github.com/datadesk/air-quality-index",
+        "Tracker": "https://github.com/datadesk/air-quality-index/issues",
     },
 )
