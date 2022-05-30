@@ -1,13 +1,13 @@
+import datetime
 import os
 import random
 import tempfile
-import requests
-import datetime
-import kml2geojson
 from datetime import timedelta
 
+import kml2geojson
+import requests
 
-API_KEYS = os.environ.get('AIRNOW_KEYS').split(',')
+API_KEYS = os.environ.get("AIRNOW_KEYS").split(",")
 
 
 def get_air_quality():
@@ -35,7 +35,7 @@ def _request(formatted_date, retry=0):
     key = random.choice(API_KEYS)
 
     # Set the URL
-    url = f'http://www.airnowapi.org/aq/kml/PM25/?DATE={formatted_date}&BBOX=-172.322998,15.397743,-59.119873,73.056941&SRS=EPSG:4326&API_KEY={key}'
+    url = f"http://www.airnowapi.org/aq/kml/PM25/?DATE={formatted_date}&BBOX=-172.322998,15.397743,-59.119873,73.056941&SRS=EPSG:4326&API_KEY={key}"
 
     # Get it
     r = requests.get(url)
@@ -46,7 +46,7 @@ def _request(formatted_date, retry=0):
     # Check to see how long the message is. If the message is short, it's telling us that
     # the updated data for that hour doesn't exist yet. If this is the case, subtract
     # an hour and try again.
-    if(len(r.content) < 200):
+    if len(r.content) < 200:
         if retry < 10:
             retry += 1
             formatted_date = _subtract_hour(formatted_date)
@@ -67,15 +67,15 @@ def _subtract_hour(formatted_date):
     Subtracts an hour from the formatted date and returns a new date with one hour
     less in the correct format.
     """
-    hour = int(formatted_date.split('T')[1]) - 1
+    hour = int(formatted_date.split("T")[1]) - 1
     if hour < 0:
         return (datetime.datetime.utcnow() - timedelta(days=1)).strftime("%Y-%m-%dT23")
     else:
         hour = str(hour)
         if len(hour) < 2:
-            hour = f'0{hour}'
+            hour = f"0{hour}"
         return f'{formatted_date.split("T")[0]}T{hour}'
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     get_air_quality()
