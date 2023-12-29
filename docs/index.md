@@ -1,6 +1,3 @@
-```{include} _templates/nav.html
-```
-
 # air-quality-index
 
 Download air quality index data from AirNow
@@ -78,7 +75,7 @@ The command-line interface is implemented using Click and setuptools. To install
 pipenv run pip install --editable .
 ```
 
-## Links
+## Other resources
 
 * Docs: [palewi.re/docs/air-quality-index/](https://palewi.re/docs/air-quality-index/)
 * Issues: [github.com/datadesk/air-quality-index/issues](https://github.com/datadesk/air-quality-index/issues)
