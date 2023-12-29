@@ -11,14 +11,14 @@ jobs:
     steps:
       - id: checkout
         name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install pipenv
         run: pipx install pipenv
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.11'
           cache: 'pipenv'
 
       - id: make
@@ -30,14 +30,17 @@ jobs:
           AIRNOW_KEYS: ${{ secrets.AIRNOW_KEYS }}
         shell: bash
 
-      - id: commit
-        name: Commit results
+      - name: Datestamp
+        run: date > data/timestamp.txt
+        shell: bash
+
+      - name: Commit results
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "actions@github.com"
           git config pull.rebase false
           git status
           git pull origin $GITHUB_REF
-          git add ./
-          git commit -m "Scrape" && git push || true
+          git add ./data
+          git commit -m "Scrape" --author="palewire <palewire@users.noreply.github.com>" && git push || true
         shell: bash
