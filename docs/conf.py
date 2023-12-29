@@ -10,12 +10,12 @@ extensions = [
     "myst_parser",
 ]
 templates_path = ["_templates"]
-source_suffix = ".rst"
+source_suffix = ".md"
 master_doc = "index"
 
 project = "air-quality-index"
 year = datetime.now().year
-copyright = f"{year} Ben Welsh"
+copyright = f"{year} palewire"
 
 exclude_patterns = ["_build"]
 
