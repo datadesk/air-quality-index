@@ -1,4 +1,4 @@
-### Links
+### Other resources
 
 * Docs: [palewi.re/docs/air-quality-index/](https://palewi.re/docs/air-quality-index/)
 * Issues: [github.com/datadesk/air-quality-index/issues](https://github.com/datadesk/air-quality-index/issues)
