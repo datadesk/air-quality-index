@@ -25,7 +25,7 @@ jobs:
         name: Run scrape command
         run: |
           pipenv run python setup.py install
-          pipenv run airqualityindex air-quality > data/air-quality.json
+          pipenv run airqualityindex air-quality > data/air-quality.geojson
         env:
           AIRNOW_KEYS: ${{ secrets.AIRNOW_KEYS }}
         shell: bash
