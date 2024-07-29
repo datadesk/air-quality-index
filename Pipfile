@@ -16,6 +16,7 @@ sphinx-palewire-theme = "*"
 requests = "*"
 click = "*"
 kml2geojson = ">=5.0.1"
+geojson = "*"
 
 [requires]
 python_version = "3.11"

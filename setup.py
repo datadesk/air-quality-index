@@ -53,6 +53,7 @@ setup(
         "requests",
         "click",
         "kml2geojson",
+        "geojson",
     ],
     entry_points="""
         [console_scripts]
