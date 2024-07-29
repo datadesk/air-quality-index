@@ -1,6 +1,6 @@
 # air-quality-index
 
-Download air quality index data from AirNow
+Download PM2.5 air quality index data from AirNow
 
 ```{contents} Table of contents
 :local:
@@ -10,7 +10,7 @@ Download air quality index data from AirNow
 ## Installation
 
 ```sh
-pipenv install air_quality_index
+pipenv install air-quality-index
 ```
 
 ## Command-line usage
@@ -18,7 +18,7 @@ pipenv install air_quality_index
 ```sh
 Usage: airqualityindex [OPTIONS] COMMAND [ARGS]...
 
-  A command-line interface for downloading air quality index data from AirNow.
+  A command-line interface for downloading PM2.5 air quality index data from AirNow.
 
 Options:
   --help  Show this message and exit.
@@ -27,7 +27,7 @@ Commands:
   air-quality  Download latest air quality GeoJSON data
 ```
 
-Download a GeoJSON of air quality index from AirNow.
+Download a GeoJSON of PM2.5 air quality index from AirNow.
 
 ```sh
 airqualityindex air-quality
@@ -48,12 +48,6 @@ data = air_quality_index.get_air_quality()
 ```
 
 ## Contributing
-
-In order to use this package, you'll need to obtain an API key from [AirNow](https://docs.airnowapi.org/) and set it as a variable in your environment as `AIRNOW_KEYS`. More than one key can be supplied by comma delimiting the string.
-
-```sh
-export AIRNOW_KEYS='YOURKEYS,GOHERE'
-```
 
 Install dependencies for development.
 
