@@ -5,7 +5,7 @@ from air_quality_index import get_air_quality
 
 @click.group()
 def cmd():
-    """A command-line interface for downloading air quality index data from AirNow."""
+    """A command-line interface for downloading PM2.5 air quality index data from AirNow."""
     pass
 
 
