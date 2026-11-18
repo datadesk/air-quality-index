@@ -15,7 +15,7 @@ LEVELS = {"Good", "Moderate", "UnhealthySG", "Unhealthy", "VeryUnhealthy"}
 def test_returns_a_feature_collection(fake_airnow):
     data = air_quality_index.get_air_quality()
     assert isinstance(data, FeatureCollection)
-    assert len(data["features"]) == 6
+    assert len(data["features"]) == 5
     assert fake_airnow.urls == [
         "https://s3-us-west-1.amazonaws.com//files.airnowtech.org/airnow/today/cur_aqi_pm25.kml"
     ]
@@ -57,13 +57,22 @@ def test_a_bad_status_fails(fake_airnow):
 def test_matches_what_kml2geojson_5_made_from_the_same_file(fake_airnow):
     """The saved answer was made by the old code, which used kml2geojson 5.1.1."""
     expected = json.loads((DATA / "cur_aqi_pm25_sample.geojson").read_text())
-    actual = json.loads(json.dumps(air_quality_index.get_air_quality()))
+    actual = json.loads(json.dumps(air_quality_index.get_air_quality(repair=False)))
     assert actual == expected
 
 
-def test_a_shape_with_only_two_points_is_kept(fake_airnow):
+def test_valid_shapes_are_identical_to_the_old_output(fake_airnow):
+    """Repair drops the one-point shape and changes nothing else in the sample."""
+    expected = json.loads((DATA / "cur_aqi_pm25_sample.geojson").read_text())
+    actual = json.loads(json.dumps(air_quality_index.get_air_quality()))
+    assert actual["features"] == expected["features"][1:]
+    same = json.dumps(actual["features"], sort_keys=True)
+    assert same == json.dumps(expected["features"][1:], sort_keys=True)
+
+
+def test_a_shape_with_only_two_points_is_kept_without_repair(fake_airnow):
     """AirNow really does publish a few shapes that are just one point twice."""
-    data = air_quality_index.get_air_quality()
+    data = air_quality_index.get_air_quality(repair=False)
     ring = data["features"][0]["geometry"]["coordinates"][0]
     assert len(ring) == 2
     assert ring[0] == ring[1]
@@ -76,14 +85,14 @@ SQUARE = (
 )
 
 
-def get_from(monkeypatch, body: str):
+def get_from(monkeypatch, body: str, **options):
     class Reply:
         ok = True
         status_code = 200
         content = KML.format(body=body).encode()
 
     monkeypatch.setattr(fetch.requests, "get", lambda *a, **k: Reply)
-    return air_quality_index.get_air_quality()
+    return air_quality_index.get_air_quality(**options)
 
 
 def test_a_style_without_a_hash_gets_one(monkeypatch):
@@ -99,7 +108,8 @@ def test_a_shape_with_no_polygon_is_skipped(monkeypatch):
 
 
 def test_several_polygons_make_a_multipolygon(monkeypatch):
-    body = f"<Placemark><MultiGeometry>{SQUARE}{SQUARE}</MultiGeometry></Placemark>"
+    other = SQUARE.replace("0,0,0 1,0,0 1,1,0 0,0,0", "5,5,0 6,5,0 6,6,0 5,5,0")
+    body = f"<Placemark><MultiGeometry>{SQUARE}{other}</MultiGeometry></Placemark>"
     data = get_from(monkeypatch, body)
     assert data["features"][0]["geometry"]["type"] == "MultiPolygon"
 
@@ -109,5 +119,6 @@ def test_a_ring_with_no_coordinates_is_empty_and_extra_tags_are_ignored(monkeypa
         "<Placemark><Polygon><extrude>1</extrude>"
         "<outerBoundaryIs><LinearRing/></outerBoundaryIs></Polygon></Placemark>"
     )
-    data = get_from(monkeypatch, body)
+    data = get_from(monkeypatch, body, repair=False)
     assert data["features"][0]["geometry"]["coordinates"] == [[]]
+    assert get_from(monkeypatch, body)["features"] == []

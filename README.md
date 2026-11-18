@@ -47,6 +47,23 @@ def my_get(url: str, *, timeout: float) -> Reply:
 data = air_quality_index.get_air_quality(get=my_get)
 ```
 
+## Repairing invalid shapes
+
+A few of the shapes in AirNow's file are not valid polygons: an edge crosses itself like a bow tie, a hole pokes outside its shape, or the shape is a single point written twice. Mapping software can refuse or mis-draw these. In AirNow's file of 18 November 2026 (16:00 UTC, 120 shapes), 5 needed this: 3 had edges that crossed, 1 had a broken hole, and 1 was a single point.
+
+By default the package repairs them with [shapely](https://shapely.readthedocs.io/). A shape that is already valid is not touched: same points, same order, same rounding as before. A repaired shape may come back as a `MultiPolygon`, because mending a bow tie makes two shapes. Only areas are kept: stray lines and points are thrown away, and a shape with no area left is left out.
+
+Pass `repair=False` to `get_air_quality` or `get_air_quality_report` (or `--no-repair` on the command) to get every shape exactly as AirNow wrote it, as version 2.1.0 did.
+
+```python
+data = air_quality_index.get_air_quality()  # valid shapes
+raw = air_quality_index.get_air_quality(repair=False)  # as AirNow wrote them
+```
+
+The repair is also available on its own: `repair_polygons(placemark.polygons)` returns a GeoJSON `Polygon` or `MultiPolygon` (or `None`), and `repair_polygon_list` returns the same polygons as lists.
+
+**This adds shapely, and with it numpy, as dependencies.** On Linux with Python 3.13 they take about 64 MB on disk (numpy about 56 MB, shapely about 8 MB) and about 18 MB to download. Both install from ready-made wheels on Python 3.11 to 3.14.
+
 ## Lower-level functions
 
 `get_air_quality` downloads AirNow's file and turns it into GeoJSON in one step. If you need the shapes as AirNow wrote them, or the hour the map is for, use the two steps it is made from:
@@ -73,6 +90,7 @@ for shape in kml.placemarks:
 * **It covers PM2.5 only.** PM2.5 is fine particles, such as wildfire smoke. Ozone and other pollutants are not in this file.
 * **It is fairly fresh.** AirNow replaces the file every hour, and the hour it is for is in `report.observed_at`. This package does not keep old copies.
 * **The data is not fully checked.** AirNow says its data "are not subjected to the full validation used to officially submit and certify data" for the EPA's regulatory records.
+* **Shapes are repaired by default.** See above. It changes only the few invalid shapes, and `repair=False` turns it off.
 * **Downloads retry.** A request waits 30 seconds, then tries again on network errors and server errors, and raises `air_quality_index.AirNowError` if it still fails.
 * **AI helped write this package.** AI tools assisted in writing its code, tests and documentation. A person directed and reviewed the work.
 

@@ -23,12 +23,19 @@ def cmd() -> None:
     help="Seconds to wait for AirNow on each try",
 )
 @click.option("--verbose", is_flag=True, help="Print each request to stderr")
-def air_quality(timeout: float, verbose: bool) -> None:
+@click.option(
+    "--repair/--no-repair",
+    default=True,
+    show_default=True,
+    help="Repair invalid shapes, or keep them exactly as AirNow wrote them",
+)
+def air_quality(timeout: float, verbose: bool, repair: bool) -> None:
     """Print AirNow's current PM2.5 map as GeoJSON.
 
     Args:
         timeout: Seconds to wait for AirNow on each try.
         verbose: Whether to print each request to standard error.
+        repair: Whether to repair invalid shapes.
 
     Raises:
         click.ClickException: If AirNow cannot be reached or sends back an
@@ -36,7 +43,7 @@ def air_quality(timeout: float, verbose: bool) -> None:
             exits with code 1.
     """
     try:
-        data = get_air_quality(verbose=verbose, timeout=timeout)
+        data = get_air_quality(verbose=verbose, timeout=timeout, repair=repair)
     except AirNowError as error:
         raise click.ClickException(str(error)) from error
     click.echo(data)

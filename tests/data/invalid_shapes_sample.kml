@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document><Style id="Unavailable" xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2"><PolyStyle><color>66cccccc</color><fill>1</fill><outline>0</outline></PolyStyle></Style><Style id="Invisible" xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2"><PolyStyle><color>00000000</color><fill>1</fill><outline>0</outline></PolyStyle></Style><Style id="Good" xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2"><PolyStyle><color>9900E400</color><fill>1</fill><outline>0</outline></PolyStyle></Style><Style id="Moderate" xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2"><PolyStyle><color>9900ffff</color><fill>1</fill><outline>0</outline></PolyStyle></Style><Style id="UnhealthySG" xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2"><PolyStyle><color>99007eff</color><fill>1</fill><outline>0</outline></PolyStyle></Style><Style id="Unhealthy" xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2"><PolyStyle><color>990000ff</color><fill>1</fill><outline>0</outline></PolyStyle></Style><Style id="VeryUnhealthy" xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2"><PolyStyle><color>994c0099</color><fill>1</fill><outline>0</outline></PolyStyle></Style><Style id="Hazardous" xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2"><PolyStyle><color>9923007e</color><fill>1</fill><outline>0</outline></PolyStyle></Style><Folder><name>1hr_pm25_usa_202611181600_</name>
+
+  <Placemark><description xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2">
+				&lt;div align="center"&gt;
+				&lt;img src="http://files.airnowtech.org/airnow/today/header.png"&gt;
+				&lt;/div&gt;
+				&lt;div align="center"&gt;
+				&lt;table border="0" cellpadding="0" cellspacing="0"&gt;
+					&lt;tr&gt;
+						&lt;td align="right"&gt;&lt;img src="http://files.airnowtech.org/airnow/today/aqilogo2.png"&gt;&lt;/td&gt;
+						&lt;td colspan="2"&gt;
+							&lt;b&gt;&lt;font color="#0f79b9" size="5" face="arial"&gt;AIR&amp;nbsp;QUALITY&amp;nbsp;INFORMATION&lt;/font&gt;&lt;br /&gt;&lt;/b&gt;
+						&lt;/td&gt;
+					&lt;/tr&gt;
+					&lt;tr&gt;&lt;td colspan=3 align="center"&gt;&lt;img src="http://files.airnowtech.org/airnow/today/aqi1.png"&gt;&amp;nbsp;&lt;font size="4" face="arial"&gt;&lt;b&gt;&lt;i&gt;Moderate&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;&lt;/td&gt;&lt;/tr&gt;
+		 			&lt;tr&gt;
+		 				&lt;td colspan="3" align="center" valign="bottom"&gt;
+					 		&lt;a href="http://www.airnow.gov/"&gt;&lt;font color="#0f79b9"&gt;&lt;b&gt;National Air Quality&lt;/b&gt;&lt;/font&gt;&lt;/a&gt;
+		 				&lt;/td&gt;
+		 			&lt;/tr&gt;
+				&lt;/table&gt;
+				&lt;/div&gt;
+				</description><styleUrl xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2">#Moderate</styleUrl>
+	
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>-94.885000000000019,31.25,0 -94.885000000000019,31.239386332499841,0 -94.885000000000019,31.257355747290564,0 -94.889500000000027,31.25,0 -94.885000000000019,31.25,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  
+  </Placemark>
+  <Placemark><description xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2">
+				&lt;div align="center"&gt;
+				&lt;img src="http://files.airnowtech.org/airnow/today/header.png"&gt;
+				&lt;/div&gt;
+				&lt;div align="center"&gt;
+				&lt;table border="0" cellpadding="0" cellspacing="0"&gt;
+					&lt;tr&gt;
+						&lt;td align="right"&gt;&lt;img src="http://files.airnowtech.org/airnow/today/aqilogo2.png"&gt;&lt;/td&gt;
+						&lt;td colspan="2"&gt;
+							&lt;b&gt;&lt;font color="#0f79b9" size="5" face="arial"&gt;AIR&amp;nbsp;QUALITY&amp;nbsp;INFORMATION&lt;/font&gt;&lt;br /&gt;&lt;/b&gt;
+						&lt;/td&gt;
+					&lt;/tr&gt;
+					&lt;tr&gt;&lt;td colspan=3 align="center"&gt;&lt;img src="http://files.airnowtech.org/airnow/today/aqi2.png"&gt;&amp;nbsp;&lt;font size="4" face="arial"&gt;&lt;b&gt;&lt;i&gt;Unhealthy for Sensitive Groups&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;&lt;/td&gt;&lt;/tr&gt;
+		 			&lt;tr&gt;
+		 				&lt;td colspan="3" align="center" valign="bottom"&gt;
+					 		&lt;a href="http://www.airnow.gov/"&gt;&lt;font color="#0f79b9"&gt;&lt;b&gt;National Air Quality&lt;/b&gt;&lt;/font&gt;&lt;/a&gt;
+		 				&lt;/td&gt;
+		 			&lt;/tr&gt;
+				&lt;/table&gt;
+				&lt;/div&gt;
+				</description><styleUrl xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2">#UnhealthySG</styleUrl>
+	
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>-79.790127859229216,40.272499999999994,0 -79.775601810239138,40.262335301019029,0 -79.753509166153762,40.256517904029195,0 -79.730959956848153,40.256730246559442,0 -79.712088486227202,40.264405215864407,0 -79.701332570219222,40.278580514713788,0 -79.695907700513374,40.287944868474348,0 -79.690010581376299,40.306836711024879,0 -79.686561137422757,40.328795123626833,0 -79.687369225197472,40.350992307616963,0 -79.693785744882518,40.371512639609463,0 -79.698109199230402,40.379989921147455,0 -79.709937335225078,40.394783981536257,0 -79.728065593654122,40.404293839976077,0 -79.732474855252534,40.407499999999999,0 -79.754359119719254,40.410278749199563,0 -79.777133832912511,40.415764715383453,0 -79.797964021179212,40.421656346781404,0 -79.819937455195401,40.425959808927068,0 -79.842253494039767,40.428376164251794,0 -79.868621245865029,40.424869331081183,0 -79.888062530412554,40.417166044480254,0 -79.908345436014187,40.407943350516916,0 -79.916231832394061,40.403931862418048,0 -79.930787240426667,40.393416352977084,0 -79.932373060024872,40.374688200748672,0 -79.917255116810196,40.364425505767052,0 -79.910484301180134,40.360494699201453,0 -79.895778419059823,40.348995136842909,0 -79.886669276374676,40.330171510227245,0 -79.865280706268081,40.33010615986241,0 -79.856713571852424,40.350228102071242,0 -79.843395874094739,40.352649868331426,0 -79.821889711389218,40.348053477265296,0 -79.804844735479435,40.342252104856676,0 -79.801798167877678,40.339999999999996,0 -79.820439591605492,40.336528853665932,0 -79.843115240494456,40.336610590626073,0 -79.865280706268081,40.33010615986241,0 -79.86457313952755,40.314509312470022,0 -79.843147323858645,40.3082218516913,0 -79.823328428716422,40.300979036066494,0 -79.810000000000031,40.287412475976637,0 -79.800929535730219,40.281437457454714,0 -79.790127859229216,40.272499999999994,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  
+  </Placemark>
+  <Placemark><description xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2">
+				&lt;div align="center"&gt;
+				&lt;img src="http://files.airnowtech.org/airnow/today/header.png"&gt;
+				&lt;/div&gt;
+				&lt;div align="center"&gt;
+				&lt;table border="0" cellpadding="0" cellspacing="0"&gt;
+					&lt;tr&gt;
+						&lt;td align="right"&gt;&lt;img src="http://files.airnowtech.org/airnow/today/aqilogo2.png"&gt;&lt;/td&gt;
+						&lt;td colspan="2"&gt;
+							&lt;b&gt;&lt;font color="#0f79b9" size="5" face="arial"&gt;AIR&amp;nbsp;QUALITY&amp;nbsp;INFORMATION&lt;/font&gt;&lt;br /&gt;&lt;/b&gt;
+						&lt;/td&gt;
+					&lt;/tr&gt;
+					&lt;tr&gt;&lt;td colspan=3 align="center"&gt;&lt;img src="http://files.airnowtech.org/airnow/today/aqi1.png"&gt;&amp;nbsp;&lt;font size="4" face="arial"&gt;&lt;b&gt;&lt;i&gt;Moderate&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;&lt;/td&gt;&lt;/tr&gt;
+		 			&lt;tr&gt;
+		 				&lt;td colspan="3" align="center" valign="bottom"&gt;
+					 		&lt;a href="http://www.airnow.gov/"&gt;&lt;font color="#0f79b9"&gt;&lt;b&gt;National Air Quality&lt;/b&gt;&lt;/font&gt;&lt;/a&gt;
+		 				&lt;/td&gt;
+		 			&lt;/tr&gt;
+				&lt;/table&gt;
+				&lt;/div&gt;
+				</description><styleUrl xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2">#Moderate</styleUrl>
+	
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>-79.180000000000021,40.924999999999997,0 -79.180000000000021,40.914742651763184,0 -79.180000000000021,40.928749994850158,0 -79.192633205357481,40.924999999999997,0 -79.180000000000021,40.924999999999997,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  
+  </Placemark>
+  <Placemark><description xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2">
+				&lt;div align="center"&gt;
+				&lt;img src="http://files.airnowtech.org/airnow/today/header.png"&gt;
+				&lt;/div&gt;
+				&lt;div align="center"&gt;
+				&lt;table border="0" cellpadding="0" cellspacing="0"&gt;
+					&lt;tr&gt;
+						&lt;td align="right"&gt;&lt;img src="http://files.airnowtech.org/airnow/today/aqilogo2.png"&gt;&lt;/td&gt;
+						&lt;td colspan="2"&gt;
+							&lt;b&gt;&lt;font color="#0f79b9" size="5" face="arial"&gt;AIR&amp;nbsp;QUALITY&amp;nbsp;INFORMATION&lt;/font&gt;&lt;br /&gt;&lt;/b&gt;
+						&lt;/td&gt;
+					&lt;/tr&gt;
+					&lt;tr&gt;&lt;td colspan=3 align="center"&gt;&lt;img src="http://files.airnowtech.org/airnow/today/aqi1.png"&gt;&amp;nbsp;&lt;font size="4" face="arial"&gt;&lt;b&gt;&lt;i&gt;Moderate&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;&lt;/td&gt;&lt;/tr&gt;
+		 			&lt;tr&gt;
+		 				&lt;td colspan="3" align="center" valign="bottom"&gt;
+					 		&lt;a href="http://www.airnow.gov/"&gt;&lt;font color="#0f79b9"&gt;&lt;b&gt;National Air Quality&lt;/b&gt;&lt;/font&gt;&lt;/a&gt;
+		 				&lt;/td&gt;
+		 			&lt;/tr&gt;
+				&lt;/table&gt;
+				&lt;/div&gt;
+				</description><styleUrl xmlns="" xmlns:kml="http://www.opengis.net/kml/2.2">#Moderate</styleUrl>
+	
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>-79.224999999999994,40.962644211023047,0 -79.224999999999994,40.957366794642539,0 -79.224999999999994,40.962644211023047,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  
+  </Placemark>
+</Folder></Document></kml>

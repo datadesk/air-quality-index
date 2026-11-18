@@ -18,7 +18,7 @@ def test_air_quality_prints_geojson(fake_airnow):
     assert result.exit_code == 0
     data = json.loads(result.output)
     assert data["type"] == "FeatureCollection"
-    assert len(data["features"]) == 6
+    assert len(data["features"]) == 5
 
 
 def test_timeout_and_verbose_options(fake_airnow):
