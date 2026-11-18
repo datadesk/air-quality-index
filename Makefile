@@ -1,5 +1,7 @@
 .DEFAULT_GOAL := help
 
+.PHONY: help install lint fix type-check test test-live check build docs clean
+
 help: ## Show available commands
 	@awk 'BEGIN {FS = ":.*## "}; /^[a-zA-Z0-9_-]+:.*## / {printf "%-14s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 

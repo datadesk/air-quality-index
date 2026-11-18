@@ -3,8 +3,10 @@ include README.md
 include .pre-commit-config.yaml
 include uv.lock
 include Makefile
+include air_quality_index/py.typed
 recursive-include docs *.md *.py Makefile
 recursive-include tests *.py
 recursive-include tests *.kml
+recursive-include tests *.geojson
 prune data
 prune docs/_build

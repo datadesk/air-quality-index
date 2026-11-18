@@ -28,6 +28,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
 ]
 
 [project.urls]
@@ -58,6 +59,9 @@ docs = [
 
 [tool.setuptools]
 packages = ["air_quality_index"]
+
+[tool.setuptools.package-data]
+air_quality_index = ["py.typed"]
 
 [tool.setuptools_scm]
 
