@@ -23,6 +23,7 @@ def get_air_quality() -> FeatureCollection:
     # Create temporary file to write request data to
     fp = tempfile.NamedTemporaryFile()
     fp.write(r.content)
+    fp.flush()  # make sure everything reaches the disk before it is read
 
     # Convert the KML to GeoJSON
     geojson_list = kml2geojson.main.convert(
