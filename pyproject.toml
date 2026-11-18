@@ -9,7 +9,6 @@ requires-python = ">=3.11"
 dependencies = [
     "click",
     "geojson",
-    "kml2geojson>=5.0.1,<6",
     "requests",
 ]
 authors = [{ name = "Ben Welsh", email = "b@palewi.re" }]
