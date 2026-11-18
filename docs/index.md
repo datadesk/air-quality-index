@@ -10,7 +10,7 @@ Download PM2.5 air quality index data from AirNow
 ## Installation
 
 ```sh
-pipenv install air-quality-index
+uv add air-quality-index
 ```
 
 ## Command-line usage
@@ -52,13 +52,13 @@ data = air_quality_index.get_air_quality()
 Install dependencies for development.
 
 ```sh
-pipenv install --dev
+uv sync --all-groups
 ```
 
 Run tests.
 
 ```sh
-pipenv run python test.py
+make check
 ```
 
 ## Developing the CLI
@@ -66,7 +66,7 @@ pipenv run python test.py
 The command-line interface is implemented using Click and setuptools. To install it locally for development inside your virtual environment, run the following installation command, as [prescribed by the Click documentation](https://click.palletsprojects.com/en/7.x/setuptools/#setuptools-integration).
 
 ```sh
-pipenv run pip install --editable .
+uv sync
 ```
 
 ## Other resources

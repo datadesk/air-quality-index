@@ -13,22 +13,23 @@ jobs:
       - id: checkout
         name: Checkout
         uses: actions/checkout@v4
-
-      - name: Install pipenv
-        run: pipx install pipenv
-
-      - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pipenv'
+          fetch-depth: 1
+
+      - id: install-uv
+        name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: 'uv.lock'
+
+      - name: Setup
+        run: uv sync
+        shell: bash
 
       - id: make
         name: Run scrape command
-        run: |
-          pipenv run python setup.py install
-          pipenv run airqualityindex air-quality > data/air-quality.geojson
-        env:
-          AIRNOW_KEYS: ${{ secrets.AIRNOW_KEYS }}
+        run: uv run airqualityindex air-quality > data/air-quality.geojson
         shell: bash
 
       - name: Datestamp
