@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import StrEnum
 
+from .errors import AirNowDataError
 from .kml import KMLFile, Placemark
 
 HOUR_PATTERN = re.compile(r"(\d{12})")
@@ -112,7 +113,7 @@ class AirQualityArea:
             outlines are joined into one tuple of rings.
 
         Raises:
-            ValueError: If the shape has no level, or a level this package does
+            AirNowDataError: If the shape has no level, or a level this package does
                 not know.
 
         Examples:
@@ -124,7 +125,7 @@ class AirQualityArea:
         try:
             level = AirQualityLevel(style)
         except ValueError:
-            raise ValueError(
+            raise AirNowDataError(
                 f"AirNow sent an air quality level we do not know: {style!r}"
             ) from None
         description = placemark.properties.get("description", "")
@@ -170,7 +171,7 @@ class AirQualityReport:
             GeoJSON.
 
         Raises:
-            ValueError: If the folder name has no date and hour, or a shape has
+            AirNowDataError: If the folder name has no date and hour, or a shape has
                 a level this package does not know.
 
         Examples:
@@ -181,7 +182,7 @@ class AirQualityReport:
         """
         found = HOUR_PATTERN.search(kml.name or "")
         if not found:
-            raise ValueError(
+            raise AirNowDataError(
                 f"AirNow's file has no date and hour in its folder name: {kml.name!r}"
             )
         observed_at = datetime.strptime(found.group(1), "%Y%m%d%H%M").replace(

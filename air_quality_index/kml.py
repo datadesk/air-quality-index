@@ -5,6 +5,8 @@ from __future__ import annotations
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 
+from .errors import AirNowDataError
+
 
 @dataclass(frozen=True, slots=True)
 class Placemark:
@@ -151,7 +153,8 @@ def read_kml(content: bytes) -> KMLFile:
         The folder name and the shapes.
 
     Raises:
-        xml.etree.ElementTree.ParseError: If the bytes are not XML.
+        AirNowDataError: If the bytes are not XML, or a coordinate is not a
+            number.
 
     Examples:
         >>> kml = read_kml(
@@ -163,13 +166,18 @@ def read_kml(content: bytes) -> KMLFile:
         >>> len(kml.placemarks)
         1
     """
-    root = ET.fromstring(content)
-    name = None
-    placemarks = []
-    for node in root.iter():
-        tag = _local(node.tag)
-        if tag == "Placemark":
-            placemarks.append(_read_placemark(node))
-        elif tag == "name" and name is None:
-            name = (node.text or "").strip() or None
+    try:
+        root = ET.fromstring(content)
+        name = None
+        placemarks = []
+        for node in root.iter():
+            tag = _local(node.tag)
+            if tag == "Placemark":
+                placemarks.append(_read_placemark(node))
+            elif tag == "name" and name is None:
+                name = (node.text or "").strip() or None
+    except (ET.ParseError, ValueError) as error:
+        raise AirNowDataError(
+            f"AirNow's file could not be read as a KML map: {error}"
+        ) from error
     return KMLFile(name=name, placemarks=placemarks)

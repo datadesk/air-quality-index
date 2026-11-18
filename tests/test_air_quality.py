@@ -6,6 +6,7 @@ import pytest
 from geojson import FeatureCollection
 
 import air_quality_index
+from air_quality_index import AirNowError, fetch
 from tests.conftest import DATA
 
 LEVELS = {"Good", "Moderate", "UnhealthySG", "Unhealthy", "VeryUnhealthy"}
@@ -49,7 +50,7 @@ def test_a_shape_with_a_hole_has_two_rings(fake_airnow):
 
 def test_a_bad_status_fails(fake_airnow):
     fake_airnow.status_code = 503
-    with pytest.raises(AssertionError, match="503"):
+    with pytest.raises(AirNowError, match="503"):
         air_quality_index.get_air_quality()
 
 
@@ -81,7 +82,7 @@ def get_from(monkeypatch, body: str):
         status_code = 200
         content = KML.format(body=body).encode()
 
-    monkeypatch.setattr(air_quality_index.requests, "get", lambda *a, **k: Reply)
+    monkeypatch.setattr(fetch.requests, "get", lambda *a, **k: Reply)
     return air_quality_index.get_air_quality()
 
 

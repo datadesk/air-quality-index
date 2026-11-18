@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-import requests
 from geojson import Feature, FeatureCollection, MultiPolygon, Polygon
 
+from .errors import AirNowDataError, AirNowError
+from .fetch import DEFAULT_TIMEOUT, download_kml
 from .kml import read_kml
 from .records import AirQualityArea, AirQualityLevel, AirQualityReport
 
 __all__ = [
+    "AirNowDataError",
+    "AirNowError",
     "AirQualityArea",
     "AirQualityLevel",
     "AirQualityReport",
@@ -16,13 +19,19 @@ __all__ = [
     "get_air_quality_report",
 ]
 
-URL = "https://s3-us-west-1.amazonaws.com//files.airnowtech.org/airnow/today/cur_aqi_pm25.kml"
-"""Where AirNow publishes its current PM2.5 map. It is replaced every hour."""
 
-
-def get_air_quality() -> FeatureCollection:
+def get_air_quality(
+    verbose: bool = False, timeout: float = DEFAULT_TIMEOUT
+) -> FeatureCollection:
     """
     Download PM2.5 air quality index data from AirNow.
+
+    A download is tried up to four times, so a short AirNow outage does not stop
+    it.
+
+    Args:
+        verbose: Print each request to standard error. Defaults to False.
+        timeout: Seconds to wait for AirNow on each try. Defaults to 30.
 
     Returns:
         A GeoJSON FeatureCollection. Each feature is a Polygon, with the
@@ -31,19 +40,20 @@ def get_air_quality() -> FeatureCollection:
         (the air quality level, such as "#Good" or "#Unhealthy").
 
     Raises:
-        AssertionError: If AirNow does not answer with a success status.
+        AirNowError: If AirNow cannot be reached or answers with an error.
+        AirNowDataError: If the file arrives but cannot be read.
 
     Examples:
         >>> data = get_air_quality()
+        >>> data = get_air_quality(timeout=60, verbose=True)
         >>> data["features"][0]["properties"]["styleUrl"]
         '#Good'
     """
     # Get it
-    r = requests.get(URL, timeout=30)
-    assert r.ok, f"Failed to download data. Status code: {r.status_code}"
+    content = download_kml(verbose=verbose, timeout=timeout)
 
     # Read the KML. It is plain XML, so the standard library can do it.
-    kml = read_kml(r.content)
+    kml = read_kml(content)
 
     # Tidy it up
     feature_list = []
@@ -61,20 +71,26 @@ def get_air_quality() -> FeatureCollection:
     return FeatureCollection(feature_list)
 
 
-def get_air_quality_report() -> AirQualityReport:
+def get_air_quality_report(
+    verbose: bool = False, timeout: float = DEFAULT_TIMEOUT
+) -> AirQualityReport:
     """
     Download PM2.5 air quality index data from AirNow as typed records.
 
     It reads the same file as ``get_air_quality``.
+
+    Args:
+        verbose: Print each request to standard error. Defaults to False.
+        timeout: Seconds to wait for AirNow on each try. Defaults to 30.
 
     Returns:
         An ``AirQualityReport`` with the hour the map is for, in UTC, and one
         ``AirQualityArea`` for each patch of the map.
 
     Raises:
-        AssertionError: If AirNow does not answer with a success status.
-        ValueError: If the file has no date and hour, or a level this package
-            does not know.
+        AirNowError: If AirNow cannot be reached or answers with an error.
+        AirNowDataError: If the file has no date and hour, or a level this
+            package does not know. It is also a ``ValueError``.
 
     Examples:
         >>> report = get_air_quality_report()
@@ -83,9 +99,8 @@ def get_air_quality_report() -> AirQualityReport:
         >>> report.areas[0].level.label
         'Good'
     """
-    r = requests.get(URL, timeout=30)
-    assert r.ok, f"Failed to download data. Status code: {r.status_code}"
-    return AirQualityReport.from_kml(read_kml(r.content))
+    content = download_kml(verbose=verbose, timeout=timeout)
+    return AirQualityReport.from_kml(read_kml(content))
 
 
 if __name__ == "__main__":
