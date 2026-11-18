@@ -10,6 +10,7 @@ dependencies = [
     "click",
     "geojson",
     "requests",
+    "shapely>=2.2.0",
 ]
 authors = [{ name = "Ben Welsh", email = "b@palewi.re" }]
 description = "Download air quality index data from AirNow"

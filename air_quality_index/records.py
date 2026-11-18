@@ -9,6 +9,7 @@ from enum import StrEnum
 
 from .errors import AirNowDataError
 from .kml import KMLFile, Placemark
+from .repair import repair_polygon_list
 
 HOUR_PATTERN = re.compile(r"(\d{12})")
 """Finds the 12 digits (year, month, day, hour, minute) in AirNow's folder name."""
@@ -80,14 +81,18 @@ class AirQualityArea:
             "Unhealthy for Sensitive Groups".
         polygon: The outline. It is a tuple of rings, the outer ring first and
             then any holes. Each ring is a tuple of (longitude, latitude)
-            pairs, in degrees, exactly as AirNow wrote them. A few shapes
-            AirNow publishes are only one point written twice.
+            pairs, in degrees, exactly as AirNow wrote them. If the shape has
+            more than one polygon, their rings are listed one after another,
+            so use ``polygons`` to tell them apart.
         description: The HTML AirNow shows in its pop-up.
+        polygons: The same outline, kept as separate polygons. Each polygon is
+            a tuple of rings, like ``polygon``. A shape that was repaired can
+            have several.
 
     Examples:
         >>> placemark = Placemark(
         ...     properties={"styleUrl": "#Good", "description": "<i>Good</i>"},
-        ...     polygons=[[[[-100.0, 20.0, 0.0], [-99.0, 20.0, 0.0], [-99.0, 21.0, 0.0]]]],
+        ...     polygons=[[[[-100.0, 20.0, 0.0], [-99.0, 20.0, 0.0], [-99.0, 21.0, 0.0], [-100.0, 20.0, 0.0]]]],
         ... )
         >>> area = AirQualityArea.from_placemark(placemark)
         >>> area.level
@@ -100,17 +105,24 @@ class AirQualityArea:
     label: str
     polygon: tuple[tuple[tuple[float, float], ...], ...]
     description: str
+    polygons: tuple[tuple[tuple[tuple[float, float], ...], ...], ...] = ()
 
     @classmethod
-    def from_placemark(cls, placemark: Placemark) -> AirQualityArea:
+    def from_placemark(
+        cls, placemark: Placemark, repair: bool = True
+    ) -> AirQualityArea:
         """Make an area from one shape in AirNow's file.
 
         Args:
             placemark: The shape, as read from the KML.
+            repair: Make invalid shapes valid, as ``repair_polygon_list`` does.
+                Defaults to True. Pass False to keep the shape exactly as AirNow
+                wrote it.
 
         Returns:
-            The area. If AirNow sent several polygons for one shape, the
-            outlines are joined into one tuple of rings.
+            The area. Its ``polygons`` hold the shape's polygons and its
+            ``polygon`` holds all their rings in one tuple. If a repair leaves
+            nothing with an area, both are empty.
 
         Raises:
             AirNowDataError: If the shape has no level, or a level this package does
@@ -131,12 +143,21 @@ class AirQualityArea:
         description = placemark.properties.get("description", "")
         found = LABEL_PATTERN.search(description)
         label = found.group(1).strip() if found else level.label
-        rings = tuple(
-            tuple((point[0], point[1]) for point in ring)
-            for polygon in placemark.polygons
-            for ring in polygon
+        source = (
+            repair_polygon_list(placemark.polygons) if repair else placemark.polygons
         )
-        return cls(level=level, label=label, polygon=rings, description=description)
+        polygons = tuple(
+            tuple(tuple((point[0], point[1]) for point in ring) for ring in polygon)
+            for polygon in source
+        )
+        rings = tuple(ring for polygon in polygons for ring in polygon)
+        return cls(
+            level=level,
+            label=label,
+            polygon=rings,
+            description=description,
+            polygons=polygons,
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -160,11 +181,14 @@ class AirQualityReport:
     areas: tuple[AirQualityArea, ...]
 
     @classmethod
-    def from_kml(cls, kml: KMLFile) -> AirQualityReport:
+    def from_kml(cls, kml: KMLFile, repair: bool = True) -> AirQualityReport:
         """Make a report from what was read out of AirNow's file.
 
         Args:
             kml: The file's folder name and shapes.
+            repair: Make invalid shapes valid. Defaults to True. Shapes with
+                no area left are then left out. Pass False to keep every shape
+                with a polygon exactly as AirNow wrote it.
 
         Returns:
             The report. Shapes with no polygon are left out, as they are in the
@@ -189,8 +213,12 @@ class AirQualityReport:
             tzinfo=UTC
         )
         areas = tuple(
-            AirQualityArea.from_placemark(placemark)
-            for placemark in kml.placemarks
-            if placemark.polygons
+            area
+            for area in (
+                AirQualityArea.from_placemark(placemark, repair)
+                for placemark in kml.placemarks
+                if placemark.polygons
+            )
+            if area.polygons or not repair
         )
         return cls(observed_at=observed_at, areas=areas)

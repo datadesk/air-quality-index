@@ -50,14 +50,14 @@ def test_types_are_exported():
 def test_function_is_used_instead_of_requests(no_requests, good):
     get = Recorder(good)
     data = air_quality_index.get_air_quality(get=get)
-    assert len(data["features"]) == 6
+    assert len(data["features"]) == 5
     assert get.urls == [fetch.URL]
 
 
 def test_the_report_function_takes_get_too(no_requests, good):
     get = Recorder(good)
     report = air_quality_index.get_air_quality_report(get=get)
-    assert len(report.areas) == 6
+    assert len(report.areas) == 5
 
 
 def test_the_timeout_reaches_the_function(no_requests, good):
@@ -105,7 +105,7 @@ def test_a_reply_needs_only_a_status_and_content(no_requests, sample_kml):
         content = sample_kml
 
     data = air_quality_index.get_air_quality(get=lambda url, *, timeout: Bare())
-    assert len(data["features"]) == 6
+    assert len(data["features"]) == 5
 
 
 def test_the_default_still_uses_requests(fake_airnow):

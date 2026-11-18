@@ -79,7 +79,7 @@ A `FeatureCollection`. Each feature is one patch.
 
 | Field | What it is |
 | --- | --- |
-| `geometry` | A `Polygon`. The first ring is the outer edge, any other rings are holes. Points are `[longitude, latitude, 0]`, rounded to six decimal places. A few shapes in AirNow's file are one point written twice. They are kept. |
+| `geometry` | A `Polygon`, or a `MultiPolygon` where a repair split a shape in two. The first ring is the outer edge, any other rings are holes. Points are `[longitude, latitude, 0]`, rounded to six decimal places. With `repair=False`, the shapes are exactly as AirNow wrote them, including the few that are invalid or are one point written twice. |
 | `properties.styleUrl` | The level, as AirNow names it: `#Good`, `#Moderate`, `#UnhealthySG`, `#Unhealthy`, `#VeryUnhealthy` or `#Hazardous`. |
 | `properties.description` | The HTML that AirNow shows when you click the patch. It holds the level's name and a link to AirNow. |
 
@@ -98,7 +98,8 @@ A `FeatureCollection`. Each feature is one patch.
 | --- | --- |
 | `level` | An `AirQualityLevel`. It has `label` (plain name) and `aqi_range` (lowest and highest index number). |
 | `label` | The level's name as AirNow wrote it in the pop-up. |
-| `polygon` | A tuple of rings. Each ring is a tuple of `(longitude, latitude)` pairs, unrounded. |
+| `polygon` | A tuple of rings. Each ring is a tuple of `(longitude, latitude)` pairs, unrounded. If the shape has several polygons, all their rings are listed one after another. |
+| `polygons` | The same outline kept as separate polygons, each a tuple of rings. Use this when a repair has made a shape into several. |
 | `description` | The pop-up HTML. |
 
 ## Command-line usage
@@ -124,6 +125,7 @@ airqualityindex air-quality --timeout 60 --verbose
 | --- | --- |
 | `--timeout` | Seconds to wait for AirNow on each try. The default is 30. |
 | `--verbose` | Print each request to standard error, so the GeoJSON on standard output stays clean. |
+| `--repair/--no-repair` | Repair invalid shapes (the default), or keep them exactly as AirNow wrote them. |
 
 If AirNow cannot be reached, the command prints one line starting with `Error:` and exits with code 1.
 
@@ -136,7 +138,7 @@ data = air_quality_index.get_air_quality()
 report = air_quality_index.get_air_quality_report(timeout=60)
 ```
 
-Both take `verbose`, `timeout` and `get`.
+Both take `verbose`, `timeout`, `get` and `repair`.
 
 ### Reliable downloads
 
@@ -166,6 +168,23 @@ data = air_quality_index.get_air_quality(get=my_get)
 ```
 
 If your function raises one of the `requests` library's errors, the package tries again, as it does for its own requests. Any other error is passed on to you.
+
+### Repairing invalid shapes
+
+A few of the shapes in AirNow's file are not valid polygons: an edge crosses itself like a bow tie, a hole pokes outside its shape, or the shape is a single point written twice. Mapping software can refuse or mis-draw these. In AirNow's file of 18 November 2026 (16:00 UTC, 120 shapes), 5 needed this: 3 had edges that crossed, 1 had a broken hole, and 1 was a single point.
+
+By default the package repairs them with [shapely](https://shapely.readthedocs.io/). A shape that is already valid is not touched: same points, same order, same rounding as before. A repaired shape may come back as a `MultiPolygon`, because mending a bow tie makes two shapes. Only areas are kept: stray lines and points are thrown away, and a shape with no area left is left out.
+
+Pass `repair=False` to `get_air_quality` or `get_air_quality_report` (or `--no-repair` on the command) to get every shape exactly as AirNow wrote it, as version 2.1.0 did.
+
+```python
+data = air_quality_index.get_air_quality()  # valid shapes
+raw = air_quality_index.get_air_quality(repair=False)  # as AirNow wrote them
+```
+
+The repair is also available on its own: `repair_polygons(placemark.polygons)` returns a GeoJSON `Polygon` or `MultiPolygon` (or `None`), and `repair_polygon_list` returns the same polygons as lists.
+
+**This adds shapely, and with it numpy, as dependencies.** On Linux with Python 3.13 they take about 64 MB on disk (numpy about 56 MB, shapely about 8 MB) and about 18 MB to download. Both install from ready-made wheels on Python 3.11 to 3.14.
 
 ### Lower-level functions
 

@@ -8,6 +8,7 @@ from .errors import AirNowDataError, AirNowError
 from .fetch import DEFAULT_TIMEOUT, DEFAULT_TRIES, Fetcher, Reply, download_kml
 from .kml import KMLFile, Placemark, read_kml
 from .records import AirQualityArea, AirQualityLevel, AirQualityReport
+from .repair import repair_polygon_list, repair_polygons
 
 __all__ = [
     "AirNowDataError",
@@ -25,6 +26,8 @@ __all__ = [
     "get_air_quality",
     "get_air_quality_report",
     "read_kml",
+    "repair_polygon_list",
+    "repair_polygons",
 ]
 
 
@@ -33,6 +36,7 @@ def get_air_quality(
     timeout: float = DEFAULT_TIMEOUT,
     *,
     get: Fetcher | None = None,
+    repair: bool = True,
 ) -> FeatureCollection:
     """
     Download PM2.5 air quality index data from AirNow.
@@ -47,9 +51,15 @@ def get_air_quality(
             (the default). Pass your own to add retries, logging or custom
             headers. It is called as ``get(url, timeout=seconds)`` and must
             return something with ``status_code`` and ``content``.
+        repair: Make invalid shapes valid. Defaults to True. AirNow's file
+            has a few shapes whose edges cross themselves or whose holes poke
+            outside them. With ``repair`` they are repaired and shapes with no
+            area left are left out. Shapes that are already valid are not
+            changed. Pass False to get every shape exactly as AirNow wrote it.
 
     Returns:
-        A GeoJSON FeatureCollection. Each feature is a Polygon, with the
+        A GeoJSON FeatureCollection. Each feature is a Polygon (or a
+        MultiPolygon, where a repair has split a shape in two), with the
         coordinates written as [longitude, latitude, 0], whose properties are
         ``description`` (the HTML AirNow shows in its pop-up) and ``styleUrl``
         (the air quality level, such as "#Good" or "#Unhealthy").
@@ -73,13 +83,18 @@ def get_air_quality(
     # Tidy it up
     feature_list = []
     for placemark in kml.placemarks:
-        # Make a Polygon, or a MultiPolygon if AirNow ever sends several at once
+        # Make a Polygon, or a MultiPolygon if there are several
         polygons = placemark.polygons
         if not polygons:
             continue
-        geometry = (
-            Polygon(polygons[0]) if len(polygons) == 1 else MultiPolygon(polygons)
-        )
+        if repair:
+            geometry = repair_polygons(polygons)
+            if geometry is None:
+                continue
+        else:
+            geometry = (
+                Polygon(polygons[0]) if len(polygons) == 1 else MultiPolygon(polygons)
+            )
         feature_list.append(Feature(geometry=geometry, properties=placemark.properties))
 
     # Return the results
@@ -91,6 +106,7 @@ def get_air_quality_report(
     timeout: float = DEFAULT_TIMEOUT,
     *,
     get: Fetcher | None = None,
+    repair: bool = True,
 ) -> AirQualityReport:
     """
     Download PM2.5 air quality index data from AirNow as typed records.
@@ -104,6 +120,11 @@ def get_air_quality_report(
             (the default). Pass your own to add retries, logging or custom
             headers. It is called as ``get(url, timeout=seconds)`` and must
             return something with ``status_code`` and ``content``.
+        repair: Make invalid shapes valid. Defaults to True. AirNow's file
+            has a few shapes whose edges cross themselves or whose holes poke
+            outside them. With ``repair`` they are repaired and shapes with no
+            area left are left out. Shapes that are already valid are not
+            changed. Pass False to get every shape exactly as AirNow wrote it.
 
     Returns:
         An ``AirQualityReport`` with the hour the map is for, in UTC, and one
@@ -122,7 +143,7 @@ def get_air_quality_report(
         'Good'
     """
     content = download_kml(verbose=verbose, timeout=timeout, get=get)
-    return AirQualityReport.from_kml(read_kml(content))
+    return AirQualityReport.from_kml(read_kml(content), repair=repair)
 
 
 if __name__ == "__main__":

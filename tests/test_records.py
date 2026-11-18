@@ -19,7 +19,7 @@ def test_the_report_has_its_hour_in_utc(fake_airnow):
 def test_the_areas_match_the_geojson(fake_airnow):
     report = air_quality_index.get_air_quality_report()
     data = air_quality_index.get_air_quality()
-    assert len(report.areas) == len(data["features"]) == 6
+    assert len(report.areas) == len(data["features"]) == 5
     for area, feature in zip(report.areas, data["features"], strict=True):
         assert "#" + area.level.value == feature["properties"]["styleUrl"]
         assert len(area.polygon) == len(feature["geometry"]["coordinates"])
