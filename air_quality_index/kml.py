@@ -144,13 +144,21 @@ def _read_placemark(node: ET.Element) -> Placemark:
 
 
 def read_kml(content: bytes) -> KMLFile:
-    """Read the bytes of AirNow's KML file.
+    """Read the bytes of AirNow's KML file into shapes, keeping their structure.
+
+    Unlike ``get_air_quality``, nothing is rounded and nothing is merged. Every
+    ``Placemark`` in the file is kept, including any with no polygon (its
+    ``polygons`` list is empty). Each polygon keeps its outer ring and its holes.
+    The hour the file is for is in the folder ``name``, written as year, month,
+    day, hour and minute in UTC; ``AirQualityReport.from_kml`` turns it into a
+    ``datetime``.
 
     Args:
-        content: The bytes of the file.
+        content: The bytes of the file, such as the result of ``download_kml``.
 
     Returns:
-        The folder name and the shapes.
+        A ``KMLFile`` with the folder ``name`` and the ``placemarks`` in file
+        order. Each ``Placemark`` has ``properties`` and ``polygons``.
 
     Raises:
         AirNowDataError: If the bytes are not XML, or a coordinate is not a

@@ -5,8 +5,8 @@ from __future__ import annotations
 from geojson import Feature, FeatureCollection, MultiPolygon, Polygon
 
 from .errors import AirNowDataError, AirNowError
-from .fetch import DEFAULT_TIMEOUT, Fetcher, Reply, download_kml
-from .kml import read_kml
+from .fetch import DEFAULT_TIMEOUT, DEFAULT_TRIES, Fetcher, Reply, download_kml
+from .kml import KMLFile, Placemark, read_kml
 from .records import AirQualityArea, AirQualityLevel, AirQualityReport
 
 __all__ = [
@@ -15,10 +15,16 @@ __all__ = [
     "AirQualityArea",
     "AirQualityLevel",
     "AirQualityReport",
+    "DEFAULT_TIMEOUT",
+    "DEFAULT_TRIES",
     "Fetcher",
+    "KMLFile",
+    "Placemark",
     "Reply",
+    "download_kml",
     "get_air_quality",
     "get_air_quality_report",
+    "read_kml",
 ]
 
 

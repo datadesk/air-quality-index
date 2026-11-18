@@ -71,7 +71,11 @@ def download_kml(
     tries: int = DEFAULT_TRIES,
     get: Fetcher | None = None,
 ) -> bytes:
-    """Download AirNow's current PM2.5 file.
+    """Download the bytes of AirNow's current PM2.5 map file, as AirNow wrote them.
+
+    Use this with ``read_kml`` when you want the shapes as they are in the file,
+    or the hour the file is for. ``get_air_quality`` does both steps and gives
+    you GeoJSON.
 
     A download is tried again when AirNow cannot be reached, takes too long, or
     answers with a server error or "too many requests". The wait before each new
@@ -96,9 +100,13 @@ def download_kml(
             is not worth trying again.
 
     Examples:
-        >>> content = download_kml()
+        >>> class Reply:
+        ...     status_code = 200
+        ...     content = b"<kml></kml>"
+        >>> download_kml(get=lambda url, *, timeout: Reply())
+        b'<kml></kml>'
+        >>> content = download_kml()  # asks AirNow
         >>> content = download_kml(timeout=60, tries=2, verbose=True)
-        >>> content = download_kml(get=my_get)
     """
     fetch: Fetcher = get or requests.get
     problem = None

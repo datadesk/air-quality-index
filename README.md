@@ -47,6 +47,26 @@ def my_get(url: str, *, timeout: float) -> Reply:
 data = air_quality_index.get_air_quality(get=my_get)
 ```
 
+## Lower-level functions
+
+`get_air_quality` downloads AirNow's file and turns it into GeoJSON in one step. If you need the shapes as AirNow wrote them, or the hour the map is for, use the two steps it is made from:
+
+* `download_kml()` returns the bytes of AirNow's file. It takes `verbose`, `timeout`, `tries` and `get`, and retries and raises `AirNowError` just like the other functions.
+* `read_kml(content)` turns those bytes into a `KMLFile`. It has `name`, the folder name AirNow gave the file (for example `1hr_pm25_usa_202611181400_`, which holds the hour in UTC), and `placemarks`, the shapes in file order. Each `Placemark` has `properties` (`styleUrl` and `description`) and `polygons`. Each polygon is a list of rings, the outer ring first and then any holes, and each point is `[longitude, latitude, altitude]`, unrounded. Shapes with no polygon are kept, with an empty list.
+
+```python
+import air_quality_index
+from air_quality_index import AirQualityReport, download_kml, read_kml
+
+kml = read_kml(download_kml())
+report = AirQualityReport.from_kml(kml)
+print(report.observed_at)  # the hour as a UTC datetime
+for shape in kml.placemarks:
+    print(shape.properties["styleUrl"], len(shape.polygons))
+```
+
+`DEFAULT_TIMEOUT` and `DEFAULT_TRIES` are the default seconds and number of tries. `KMLFile` and `Placemark` are exported so you can name them in type hints.
+
 ## Things to know
 
 * **It shows the level, not a number.** AirNow's file says which air quality level each patch of the map is in, such as "Good" or "Unhealthy". It does not say the exact index number. The documentation lists the number range for each level.
