@@ -16,6 +16,14 @@ class FakeResponse:
         self.ok = status_code < 400
 
 
+@pytest.fixture(autouse=True)
+def no_waiting(monkeypatch):
+    """Skip the pauses between retries so the tests run fast."""
+    from air_quality_index import fetch
+
+    monkeypatch.setattr(fetch.time, "sleep", lambda seconds: None)
+
+
 @pytest.fixture
 def sample_kml() -> bytes:
     """The saved sample of AirNow's file, as bytes.
@@ -30,7 +38,7 @@ def sample_kml() -> bytes:
 @pytest.fixture
 def fake_airnow(monkeypatch, sample_kml):
     """Replace ``requests.get`` and record the addresses that were asked for."""
-    import air_quality_index
+    from air_quality_index import fetch
 
     class Fake:
         status_code = 200
@@ -44,5 +52,5 @@ def fake_airnow(monkeypatch, sample_kml):
         fake.kwargs = kwargs
         return FakeResponse(sample_kml, fake.status_code)
 
-    monkeypatch.setattr(air_quality_index.requests, "get", get)
+    monkeypatch.setattr(fetch.requests, "get", get)
     return fake
