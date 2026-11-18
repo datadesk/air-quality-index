@@ -13,7 +13,6 @@ source = { editable = "." }
 dependencies = [
     { name = "click" },
     { name = "geojson" },
-    { name = "kml2geojson" },
     { name = "requests" },
 ]
 
@@ -41,7 +40,6 @@ test = [
 requires-dist = [
     { name = "click" },
     { name = "geojson" },
-    { name = "kml2geojson", specifier = ">=5.0.1,<6" },
     { name = "requests" },
 ]
 
@@ -579,18 +577,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/43/4b/674af6ef2f97d56f0ab5153bf0bfa28ccb6c3ed4d1babf4305449668807b/keyring-25.7.0.tar.gz", hash = "sha256:fe01bd85eb3f8fb3dd0405defdeac9a5b4f6f0439edbb3149577f244a2e8245b", size = 63516, upload-time = "2025-11-16T16:26:09.482Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/81/db/e655086b7f3a705df045bf0933bdd9c2f79bb3c97bfef1384598bb79a217/keyring-25.7.0-py3-none-any.whl", hash = "sha256:be4a0b195f149690c166e850609a477c532ddbfbaed96a404d4e43f8d5e2689f", size = 39160, upload-time = "2025-11-16T16:26:08.402Z" },
-]
-
-[[package]]
-name = "kml2geojson"
-version = "5.1.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "click" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/97/cc/4a4360963f28aed24a4f88f77a0a0bb88b7e866f5d1bb768291b48c29666/kml2geojson-5.1.1.tar.gz", hash = "sha256:298f385e56a0948b695d52a1e8945be3712f9fabe53f8fca5f23cf4b100d4b23", size = 80350, upload-time = "2026-03-12T00:29:14.664Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/7c/8a/c28b2553f877bf605944610ff9303812d14e31cb36e193829333a48a4b84/kml2geojson-5.1.1-py3-none-any.whl", hash = "sha256:f0b4b53a48c283c1c940af17aaa192fb14077966eace4c1ba9f4ac79d1cc74db", size = 10304, upload-time = "2026-03-12T00:29:12.828Z" },
 ]
 
 [[package]]
