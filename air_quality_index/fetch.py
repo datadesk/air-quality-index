@@ -5,6 +5,7 @@ from __future__ import annotations
 import random
 import sys
 import time
+from typing import Protocol
 
 import requests
 
@@ -23,10 +24,52 @@ RETRY_STATUS_CODES = frozenset({408, 429})
 """Statuses worth another try. Every 5xx status is also worth another try."""
 
 
+class Reply(Protocol):
+    """What a request function must hand back: a status code and the file's bytes.
+
+    A ``requests.Response`` fits this.
+    """
+
+    @property
+    def status_code(self) -> int:
+        """The web status, such as 200 or 404."""
+        ...
+
+    @property
+    def content(self) -> bytes:
+        """The body of the reply, as bytes."""
+        ...
+
+
+class Fetcher(Protocol):
+    """A function that makes a web request for this package.
+
+    Pass one as ``get`` to add retries, logging or custom headers. ``requests.get``
+    fits this, and is the default.
+
+    Examples:
+        >>> import requests
+        >>> fetcher: Fetcher = requests.get
+    """
+
+    def __call__(self, url: str, *, timeout: float) -> Reply:
+        """Request a web address.
+
+        Args:
+            url: The address to request.
+            timeout: The seconds to wait before giving up.
+
+        Returns:
+            The reply.
+        """
+        ...
+
+
 def download_kml(
     verbose: bool = False,
     timeout: float = DEFAULT_TIMEOUT,
     tries: int = DEFAULT_TRIES,
+    get: Fetcher | None = None,
 ) -> bytes:
     """Download AirNow's current PM2.5 file.
 
@@ -39,6 +82,11 @@ def download_kml(
         verbose: Print each request to standard error. Defaults to False.
         timeout: Seconds to wait for AirNow on each try. Defaults to 30.
         tries: How many tries to make in all. Defaults to 4.
+        get: A function that makes the web request, such as ``requests.get``
+            (the default). It is called as ``get(url, timeout=seconds)`` and
+            must return something with ``status_code`` and ``content``. Its
+            ``requests`` errors are retried like the default's. Any other error
+            it raises is passed on untouched.
 
     Returns:
         The bytes of the file.
@@ -50,7 +98,9 @@ def download_kml(
     Examples:
         >>> content = download_kml()
         >>> content = download_kml(timeout=60, tries=2, verbose=True)
+        >>> content = download_kml(get=my_get)
     """
+    fetch: Fetcher = get or requests.get
     problem = None
     for attempt in range(max(tries, 1)):
         if attempt:
@@ -58,7 +108,7 @@ def download_kml(
         if verbose:
             print(f"Requesting {URL}", file=sys.stderr)
         try:
-            response = requests.get(URL, timeout=timeout)
+            response = fetch(URL, timeout=timeout)
         except (requests.ConnectionError, requests.Timeout) as error:
             problem = AirNowError(f"Could not reach AirNow at {URL}: {error}", url=URL)
             continue

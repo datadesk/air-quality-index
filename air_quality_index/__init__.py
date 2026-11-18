@@ -5,7 +5,7 @@ from __future__ import annotations
 from geojson import Feature, FeatureCollection, MultiPolygon, Polygon
 
 from .errors import AirNowDataError, AirNowError
-from .fetch import DEFAULT_TIMEOUT, download_kml
+from .fetch import DEFAULT_TIMEOUT, Fetcher, Reply, download_kml
 from .kml import read_kml
 from .records import AirQualityArea, AirQualityLevel, AirQualityReport
 
@@ -15,13 +15,18 @@ __all__ = [
     "AirQualityArea",
     "AirQualityLevel",
     "AirQualityReport",
+    "Fetcher",
+    "Reply",
     "get_air_quality",
     "get_air_quality_report",
 ]
 
 
 def get_air_quality(
-    verbose: bool = False, timeout: float = DEFAULT_TIMEOUT
+    verbose: bool = False,
+    timeout: float = DEFAULT_TIMEOUT,
+    *,
+    get: Fetcher | None = None,
 ) -> FeatureCollection:
     """
     Download PM2.5 air quality index data from AirNow.
@@ -32,6 +37,10 @@ def get_air_quality(
     Args:
         verbose: Print each request to standard error. Defaults to False.
         timeout: Seconds to wait for AirNow on each try. Defaults to 30.
+        get: A function that makes the web request, such as ``requests.get``
+            (the default). Pass your own to add retries, logging or custom
+            headers. It is called as ``get(url, timeout=seconds)`` and must
+            return something with ``status_code`` and ``content``.
 
     Returns:
         A GeoJSON FeatureCollection. Each feature is a Polygon, with the
@@ -50,7 +59,7 @@ def get_air_quality(
         '#Good'
     """
     # Get it
-    content = download_kml(verbose=verbose, timeout=timeout)
+    content = download_kml(verbose=verbose, timeout=timeout, get=get)
 
     # Read the KML. It is plain XML, so the standard library can do it.
     kml = read_kml(content)
@@ -72,7 +81,10 @@ def get_air_quality(
 
 
 def get_air_quality_report(
-    verbose: bool = False, timeout: float = DEFAULT_TIMEOUT
+    verbose: bool = False,
+    timeout: float = DEFAULT_TIMEOUT,
+    *,
+    get: Fetcher | None = None,
 ) -> AirQualityReport:
     """
     Download PM2.5 air quality index data from AirNow as typed records.
@@ -82,6 +94,10 @@ def get_air_quality_report(
     Args:
         verbose: Print each request to standard error. Defaults to False.
         timeout: Seconds to wait for AirNow on each try. Defaults to 30.
+        get: A function that makes the web request, such as ``requests.get``
+            (the default). Pass your own to add retries, logging or custom
+            headers. It is called as ``get(url, timeout=seconds)`` and must
+            return something with ``status_code`` and ``content``.
 
     Returns:
         An ``AirQualityReport`` with the hour the map is for, in UTC, and one
@@ -99,7 +115,7 @@ def get_air_quality_report(
         >>> report.areas[0].level.label
         'Good'
     """
-    content = download_kml(verbose=verbose, timeout=timeout)
+    content = download_kml(verbose=verbose, timeout=timeout, get=get)
     return AirQualityReport.from_kml(read_kml(content))
 
 
