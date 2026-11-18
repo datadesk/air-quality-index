@@ -102,3 +102,12 @@ def test_several_polygons_make_a_multipolygon(monkeypatch):
     body = f"<Placemark><MultiGeometry>{SQUARE}{SQUARE}</MultiGeometry></Placemark>"
     data = get_from(monkeypatch, body)
     assert data["features"][0]["geometry"]["type"] == "MultiPolygon"
+
+
+def test_a_ring_with_no_coordinates_is_empty_and_extra_tags_are_ignored(monkeypatch):
+    body = (
+        "<Placemark><Polygon><extrude>1</extrude>"
+        "<outerBoundaryIs><LinearRing/></outerBoundaryIs></Polygon></Placemark>"
+    )
+    data = get_from(monkeypatch, body)
+    assert data["features"][0]["geometry"]["coordinates"] == [[]]

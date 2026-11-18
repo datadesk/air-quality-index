@@ -182,6 +182,8 @@ make install
 make check
 ```
 
+`make check` runs the tests with coverage and fails if the tests run less than 95% of the package's code, counting every if/else path. `make test-fast` runs them without coverage. In the automated checks, the newest Python version runs with coverage.
+
 `make test-live` runs the tests that call AirNow's real site. The other tests use a small piece of AirNow's real file saved in `tests/data`, so they work offline.
 
 ## Other resources
